@@ -1,0 +1,8 @@
+a.dropdown-item.text-light:hover {
+  background: grey;
+  color: white;
+  font-weight: bold;
+}
+.white-icon {
+  color: white;
+}

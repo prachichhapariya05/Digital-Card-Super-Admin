@@ -1,0 +1,74 @@
+.viewDigitalBusinessCardContainer {
+  /* background-image: url('https://img.freepik.com/premium-vector/basic-rgb_266878-243.jpg?w=1060'); */
+  background-size: cover;
+  background-position: center;
+  color: white;
+}
+
+/* Card Container */
+.viewCardContainer {
+  max-width: 100%;
+  overflow-x: hidden;
+  background-color: white;
+  color: gray;
+  border-radius: 10px;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-auto-rows: minmax(min-content, max-content);
+  row-gap: 20px;
+}
+
+.viewCardImagesSection {
+  position: relative; /* Ensure positioning context */
+  height: 30vh;
+  width: 100%;
+  background-image: url('../../assets/icons/office_cover_photo_01.jpg');
+  background-size: cover;
+  background-position: center;
+  display: flex;
+}
+
+.viewCardImages_profileImage {
+  position: absolute;
+  top: 100%;
+  left: 23%;
+  transform: translate(-47%, -57%);
+  z-index: 1;
+}
+
+.viewCardProfileBioDetails {
+  width: 100%;
+  grid-column: 1;
+  padding: 20px 0;
+  margin-top: 5vh;
+  z-index: 2;
+}
+
+.viewCardSocialLinks {
+  width: 100%;
+  grid-column: 1;
+  padding: 0px;
+  margin-top: 1vh;
+  margin-bottom: 6vh;
+  z-index: 2;
+}
+
+.view_card_content_title {
+  font-size: larger;
+  font-weight: 500;
+}
+
+.view_card_content_sub_title {
+  font-size: small;
+  font-weight: 400;
+  color: gray;
+}
+
+.button-content {
+  display: flex;
+  align-items: center;
+}
+
+.social_custom_icon {
+  margin-right: 5px;
+}
