@@ -95,7 +95,7 @@ export async function changePasswordAPI(oldPassword, newPassword) {
 export const updateProfileData = async (token, profileData) => {
   try {
     const response = await axios.put(
-      'http://localhost:3007/api/v1/superAdmin/editSAProfile',
+      `${Base_Url}api/v1/superAdmin/editSAProfile`,
       profileData,
       {
         headers: {

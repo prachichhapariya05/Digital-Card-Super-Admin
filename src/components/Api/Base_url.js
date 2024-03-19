@@ -1,1 +1,1 @@
-export const Base_Url = 'http://91.108.105.167/api/v1/superAdmin/';
+export const Base_Url = 'https://card.midin.app/api/v1/superAdmin/';
