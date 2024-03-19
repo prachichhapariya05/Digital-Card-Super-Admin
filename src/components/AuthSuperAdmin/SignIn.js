@@ -65,7 +65,7 @@ function SignIn() {
     <div
       className="background-image image-responsive"
       style={{
-        backgroundImage: 'url(/assets/8_september_background_04.jpg)',
+        backgroundImage: 'url(/assets/mainBgImgResize60.jpg)',
       }}
     >
       <div className="full-screen-container container">
