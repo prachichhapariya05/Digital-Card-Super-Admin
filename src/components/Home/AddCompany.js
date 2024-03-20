@@ -5,6 +5,7 @@ import './AddComapny.css';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 import { Base_Url } from '../Api/Base_url';
+import { Modal } from 'antd';
 
 const AddCompany = () => {
   const navigate = useNavigate();
@@ -67,7 +68,15 @@ const AddCompany = () => {
       const response = await axios.post(`${Base_Url}createCompany`, formData);
       if (response.status === 201) {
         toast.success(response.data.message);
-        navigate('/super-admin-dashboard');
+        setFormData({
+          company_name: '',
+          company_email: '',
+          company_contact_number: '',
+          max_cards: '',
+          contact_person_name: '',
+          contact_person_email: '',
+        });
+        navigate('/dashboard/super-admin-dashboard');
       }
     } catch (error) {
       toast.error(error.response.data.message);

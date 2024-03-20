@@ -44,18 +44,20 @@
 .inputTag {
   font-size: 1.2em;
   padding: 0.1em 0.25em;
-  background-color: hsla(201, 100%, 91%, 0.3);
-  border: 1px solid hsl(201, 100%, 6%);
+  /* background-color: hsla(201, 100%, 91%, 0.3);
+  border: 1px solid hsl(201, 100%, 6%); */
+  background-color: white;
+  border: 1px solid hsl(200, 35%, 92%);
   outline: none;
   border-top-left-radius: 8px !important;
   border-bottom-right-radius: 8px;
-  color: #fff;
+  color: rgb(4, 4, 4);
   font-weight: lighter;
 }
 
-.input-group .inputTag:focus {
+/* .input-group .inputTag:focus {
   background-color: hsl(268.87deg 95.41% 2.9% / 30%);
-}
+} */
 
 .login-button {
   padding: 10px 30px;
@@ -72,13 +74,13 @@
   font-weight: 700;
 }
 
-.login-button:hover {
+/* .login-button:hover {
   background-color: hsla(201, 100%, 50%, 0.3);
-}
-
+} */
+/* 
 .login-button:focus {
   background-color: hsla(201, 100%, 50%, 0.5);
-}
+} */
 .pass-signup {
   color: #fff;
   padding: 4px;
@@ -111,6 +113,13 @@
 .inputTag::placeholder {
   color: #1b1919;
   font-weight: 400;
-  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande',
-    'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+.btnEyePassword {
+  background-color: transparent;
+  border: none;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 0.5rem;
 }

@@ -94,16 +94,12 @@ export async function changePasswordAPI(oldPassword, newPassword) {
 
 export const updateProfileData = async (token, profileData) => {
   try {
-    const response = await axios.put(
-      `${Base_Url}api/v1/superAdmin/editSAProfile`,
-      profileData,
-      {
-        headers: {
-          Authorization: token,
-          'Content-Type': 'application/json',
-        },
-      }
-    );
+    const response = await axios.put(`${Base_Url}editSAProfile`, profileData, {
+      headers: {
+        Authorization: token,
+        'Content-Type': 'application/json',
+      },
+    });
     return response.data;
   } catch (error) {
     throw error;

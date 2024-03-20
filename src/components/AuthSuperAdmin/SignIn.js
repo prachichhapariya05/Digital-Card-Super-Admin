@@ -97,7 +97,7 @@ function SignIn() {
                 placeholder="Enter Password"
               />
               <button
-                className="border-0 position-absolute bottom-50 translate-middle-y btnEye"
+                className="border-0 position-absolute bottom-50 translate-middle-y btnEyePassword"
                 type="button"
                 onClick={togglePasswordVisibility}
               >
