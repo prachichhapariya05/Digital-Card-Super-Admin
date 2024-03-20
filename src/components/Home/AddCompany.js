@@ -76,7 +76,7 @@ const AddCompany = () => {
           contact_person_name: '',
           contact_person_email: '',
         });
-        navigate('/dashboard/super-admin-dashboard');
+        navigate('/dashboard');
       }
     } catch (error) {
       toast.error(error.response.data.message);
