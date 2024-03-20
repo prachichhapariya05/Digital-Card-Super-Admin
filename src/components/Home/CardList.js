@@ -268,6 +268,7 @@ import { fetchCardListsForSA } from '../Api/Company_api';
 import './CardList.css';
 import { IoIosSearch } from 'react-icons/io';
 import { FaDiamond } from 'react-icons/fa6';
+import LogoImage from '../../assets/icons/logoLight.png';
 
 const { Header, Content, Sider } = Layout;
 const { SubMenu } = Menu;
@@ -373,7 +374,13 @@ const CardList = () => {
           onBreakpoint={(broken) => {}}
           onCollapse={(collapsed, type) => {}}
         >
-          <div className="demo-logo-vertical" />
+          <div className="demo-logo-vertical bg-white">
+            <img
+              src={LogoImage}
+              alt="Logo"
+              style={{ width: '100%', padding: '16px 0' }}
+            />
+          </div>
           <Menu
             theme="light"
             mode="inline"

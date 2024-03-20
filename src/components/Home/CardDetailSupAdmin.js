@@ -31,6 +31,7 @@ import ProfileSupAdmin from '../AuthSuperAdmin/ProfileSupAdmin';
 import ChangePasswordSupAdmin from '../AuthSuperAdmin/ChangePasswordSupAdmin';
 import AddCompany from './AddCompany';
 import { toast } from 'react-toastify';
+import LogoImage from '../../assets/icons/logoLight.png';
 
 const { Content, Sider } = Layout;
 const { SubMenu } = Menu;
@@ -146,7 +147,13 @@ function ViewDigitalCard() {
         onBreakpoint={(broken) => {}}
         onCollapse={(collapsed, type) => {}}
       >
-        <div className="demo-logo-vertical" />
+        <div className="demo-logo-vertical bg-white">
+          <img
+            src={LogoImage}
+            alt="Logo"
+            style={{ width: '100%', padding: '16px 0' }}
+          />
+        </div>
         <Menu
           theme="light"
           // mode="inline"
