@@ -1,4 +1,4 @@
-.background-image {
+/* .background-image {
   width: 100%;
   height: 100%;
   background-repeat: no-repeat;
@@ -44,8 +44,6 @@
 .inputTag {
   font-size: 1.2em;
   padding: 0.1em 0.25em;
-  /* background-color: hsla(201, 100%, 91%, 0.3);
-  border: 1px solid hsl(201, 100%, 6%); */
   background-color: white;
   border: 1px solid hsl(200, 35%, 92%);
   outline: none;
@@ -55,9 +53,7 @@
   font-weight: lighter;
 }
 
-/* .input-group .inputTag:focus {
-  background-color: hsl(268.87deg 95.41% 2.9% / 30%);
-} */
+
 
 .login-button {
   padding: 10px 30px;
@@ -74,13 +70,6 @@
   font-weight: 700;
 }
 
-/* .login-button:hover {
-  background-color: hsla(201, 100%, 50%, 0.3);
-} */
-/* 
-.login-button:focus {
-  background-color: hsla(201, 100%, 50%, 0.5);
-} */
 .pass-signup {
   color: #fff;
   padding: 4px;
@@ -122,4 +111,72 @@
   top: 50%;
   transform: translateY(-50%);
   right: 0.5rem;
+}
+
+
+ */
+
+@media (max-width: 768px) {
+  .textsize {
+    font-size: 16px;
+  }
+  .logoimg {
+    width: 150px !important;
+  }
+  .LogoImg2 {
+    width: 150px;
+  }
+  .bgContainer {
+    height: 40%;
+  }
+  .textContainer {
+    height: 60%;
+  }
+  .inputFieldGroup {
+    width: 90% !important;
+    margin-left: 18px;
+  }
+}
+@media (max-width: 576px) {
+  .wrap-login100 {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+}
+.mainContainer {
+  overflow: hidden;
+}
+.btnGroup {
+  align-self: center;
+  width: 70%;
+}
+.btn-signin {
+  background: rgb(18, 161, 163);
+  color: white;
+  border-radius: 18px;
+  padding: 3px;
+  border: none;
+  line-height: 2;
+}
+.bgImg {
+  object-fit: cover;
+  filter: brightness(0.5);
+  width: 100%;
+  height: 100%;
+}
+.logoimg {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 200px;
+  z-index: 1;
+}
+.cardWidth {
+  width: 400px;
+}
+.LogoImgSize {
+  width: 200px;
+}
+.btn-signin {
+  width: 70%;
 }

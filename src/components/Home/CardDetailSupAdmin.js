@@ -31,7 +31,7 @@ import ProfileSupAdmin from '../AuthSuperAdmin/ProfileSupAdmin';
 import ChangePasswordSupAdmin from '../AuthSuperAdmin/ChangePasswordSupAdmin';
 import AddCompany from './AddCompany';
 import { toast } from 'react-toastify';
-import LogoImage from '../../assets/icons/logoLight.png';
+import LogoImage from '../../assets/icons/logo.png';
 import CustomSpinner from '../Common/CustomSpinner';
 
 const { Content, Sider } = Layout;
@@ -151,7 +151,7 @@ function ViewDigitalCard() {
         onBreakpoint={(broken) => {}}
         onCollapse={(collapsed, type) => {}}
       >
-        <div className="demo-logo-vertical bg-white">
+        <div className="demo-logo-vertical">
           <img
             src={LogoImage}
             alt="Logo"
@@ -159,11 +159,11 @@ function ViewDigitalCard() {
           />
         </div>
         <Menu
-          theme="light"
+          theme="dark"
           // mode="inline"
           defaultSelectedKeys={['1']}
           selectedKeys={[selectedItemKey]}
-          style={{ height: '100%' }}
+          style={{ height: '100vh' }}
         >
           {items.map((item) => (
             <Menu.Item
@@ -287,10 +287,18 @@ function ViewDigitalCard() {
                               </Row>
                             </div>
                             <div className="viewCardProductAndServices">
-                              <Row className="my-3">
+                              <Row
+                                className="my-3"
+                                style={{
+                                  display: cardDetails.product_and_services
+                                    ? 'flex'
+                                    : 'none',
+                                }}
+                              >
                                 <label className="fw-bold text-black">
                                   Product And Services
                                 </label>
+                                <div>{cardDetails.product_and_services}</div>
                               </Row>
                             </div>
                             <div className="viewCardCompanyInfo">
@@ -650,8 +658,8 @@ function ViewDigitalCard() {
                                     size="large"
                                     // onClick={handleAddToContacts}
                                   >
-                                    <FaUserPlus className="fs-3 me-3" /> Add Me
-                                    To Your Contact
+                                    <FaUserPlus className="fs-3 me-3" /> Save To
+                                    Phonebook
                                   </Button>
                                 </Col>
                               </Row>

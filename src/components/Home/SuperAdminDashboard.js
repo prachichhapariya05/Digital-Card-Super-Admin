@@ -37,6 +37,10 @@ function SuperAdminDashboard() {
     setNewStatus(status);
     setModalVisible(true);
   };
+  const formatDate = (timestamp) => {
+    const date = new Date(timestamp);
+    return date.toISOString().split('T')[0];
+  };
 
   const fetchCompanies = async () => {
     try {
@@ -182,8 +186,9 @@ function SuperAdminDashboard() {
                     <th scope="col">#</th>
                     <th scope="col">Name</th>
                     <th scope="col">Email</th>
-                    <th scope="col">Logo</th>
                     <th scope="col">Contact</th>
+                    <th scope="col">Created</th>
+                    <th scope="col">Remaining_duration </th>
                     <th scope="col">Max_Cards</th>
                     <th scope="col">Used Cards</th>
                     <th scope="col">Cards List</th>
@@ -197,14 +202,9 @@ function SuperAdminDashboard() {
                       <th scope="row">{index + 1}</th>
                       <td>{company.company_name}</td>
                       <td>{company.company_email}</td>
-                      <td>
-                        <img
-                          src={company.company_logo}
-                          alt={company.company_name}
-                          className="rounded-circle border logo-img"
-                        />
-                      </td>
                       <td>{company.company_contact_number}</td>
+                      <td>{formatDate(company.created_at)}</td>
+                      <td>{company.remaining_duration}</td>
                       <td>{company.max_cards}</td>
                       <td>{company.used_cards}</td>
                       <td>

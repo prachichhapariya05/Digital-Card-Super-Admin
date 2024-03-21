@@ -20,7 +20,7 @@ import SuperAdminDashboard from './SuperAdminDashboard';
 import ProfileSupAdmin from '../AuthSuperAdmin/ProfileSupAdmin';
 import ChangePasswordSupAdmin from '../AuthSuperAdmin/ChangePasswordSupAdmin';
 import AddCompany from './AddCompany';
-import LogoImage from '../../assets/icons/logoLight.png';
+import LogoImage from '../../assets/icons/logo.png';
 
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
@@ -91,7 +91,7 @@ const NavbarSupAdmin = () => {
         onBreakpoint={(broken) => {}}
         onCollapse={(collapsed, type) => {}}
       >
-        <div className="demo-logo-vertical bg-white">
+        <div className="demo-logo-vertical">
           <img
             src={LogoImage}
             alt="Logo"
@@ -100,7 +100,7 @@ const NavbarSupAdmin = () => {
         </div>
 
         <Menu
-          theme="light"
+          theme="dark"
           mode="inline"
           defaultSelectedKeys={['1']}
           selectedKeys={[selectedItemKey]}

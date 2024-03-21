@@ -17,6 +17,7 @@ const AddCompany = () => {
     max_cards: '',
     contact_person_name: '',
     contact_person_email: '',
+    trial_duration: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -31,6 +32,10 @@ const AddCompany = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const handleDurationChange = (value) => {
+    setFormData({ ...formData, trial_duration: value });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -41,7 +46,8 @@ const AddCompany = () => {
       !formData.company_contact_number ||
       !formData.max_cards ||
       !formData.contact_person_name ||
-      !formData.contact_person_email
+      !formData.contact_person_email ||
+      !formData.trial_duration
     ) {
       toast.error('All fields are required');
       setIsSubmitting(false);
@@ -74,6 +80,7 @@ const AddCompany = () => {
 
     try {
       const response = await axios.post(`${Base_Url}createCompany`, formData);
+      console.log('object', formData);
       if (response.status === 201) {
         toast.success(response.data.message);
         setFormData({
@@ -83,6 +90,7 @@ const AddCompany = () => {
           max_cards: '',
           contact_person_name: '',
           contact_person_email: '',
+          trial_duration: '',
         });
         // navigate('/dashboard');
       }
@@ -170,6 +178,20 @@ const AddCompany = () => {
                 value={formData.contact_person_email}
                 onChange={handleChange}
               />
+            </div>
+
+            <div>
+              <select
+                className="form-control rounded border-white mb-3 form-input"
+                value={formData.trialDuration}
+                onChange={(e) => handleDurationChange(e.target.value)}
+              >
+                <option value="">Select Trial Duration</option>
+                <option value="1">1 Month</option>
+                <option value="12">12 Months</option>
+                <option value="24">24 Months</option>
+                <option value="36">36 Months</option>
+              </select>
             </div>
             <div className="submit-button-wrapper">
               <input type="submit" value="Submit" />

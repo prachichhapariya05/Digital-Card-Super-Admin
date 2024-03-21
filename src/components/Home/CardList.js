@@ -268,7 +268,7 @@ import { fetchCardListsForSA } from '../Api/Company_api';
 import './CardList.css';
 import { IoIosSearch } from 'react-icons/io';
 import { FaDiamond } from 'react-icons/fa6';
-import LogoImage from '../../assets/icons/logoLight.png';
+import LogoImage from '../../assets/icons/logo.png';
 import CustomSpinner from '../Common/CustomSpinner';
 
 const { Header, Content, Sider } = Layout;
@@ -378,7 +378,7 @@ const CardList = () => {
           onBreakpoint={(broken) => {}}
           onCollapse={(collapsed, type) => {}}
         >
-          <div className="demo-logo-vertical bg-white">
+          <div className="demo-logo-vertical">
             <img
               src={LogoImage}
               alt="Logo"
@@ -386,11 +386,11 @@ const CardList = () => {
             />
           </div>
           <Menu
-            theme="light"
+            theme="dark"
             mode="inline"
             defaultSelectedKeys={['1']}
             selectedKeys={[selectedItemKey]}
-            style={{ height: '100%' }}
+            style={{ height: '100vh' }}
           >
             {items.map((item) => (
               <Menu.Item
