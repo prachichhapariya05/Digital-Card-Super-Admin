@@ -5,6 +5,7 @@ import { forgetPasswordSuperAdmin } from '../Api/Auth_api';
 import { toast } from 'react-toastify';
 import Cookies from 'js-cookie';
 import { IoIosEye, IoIosEyeOff } from 'react-icons/io';
+import CustomSpinner from '../Common/CustomSpinner';
 
 function ForgetPassword() {
   const navigate = useNavigate();
@@ -42,48 +43,54 @@ function ForgetPassword() {
   };
 
   return (
-    <div
-      className="background-image image-responsive"
-      style={{
-        backgroundImage: 'url(/assets/mainBgImgResize60.jpg)',
-      }}
-    >
-      <div className="full-screen-container container">
-        <div className="login-container">
-          <h3 className="login-title">
-            {' '}
-            Forget Password for Digital Business Card Super Admin
-          </h3>
-          {/* {error && <div className="error-message">{error}</div>} */}
-          <form onSubmit={handleSignIn}>
-            <div className="input-group">
-              <label className="labelTag">Email</label>
-              <input
-                type="text"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="inputTag"
-                placeholder="Enter email"
-              />
-              {emailError && <div className="error-message">{emailError}</div>}
-            </div>
+    <>
+      {' '}
+      {isSubmitting && <CustomSpinner />}
+      <div
+        className="background-image image-responsive"
+        style={{
+          backgroundImage: 'url(/assets/mainBgImgResize60.jpg)',
+        }}
+      >
+        <div className="full-screen-container container">
+          <div className="login-container">
+            <h3 className="login-title">
+              {' '}
+              Forget Password for Digital Business Card Super Admin
+            </h3>
+            {/* {error && <div className="error-message">{error}</div>} */}
+            <form onSubmit={handleSignIn}>
+              <div className="input-group">
+                <label className="labelTag">Email</label>
+                <input
+                  type="text"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="inputTag"
+                  placeholder="Enter email"
+                />
+                {emailError && (
+                  <div className="error-message">{emailError}</div>
+                )}
+              </div>
 
-            <button
-              type="submit"
-              className="login-button"
-              disabled={isSubmitting}
-            >
-              Reset Password
-            </button>
-          </form>
-          <div className="pass-signup mt-2">
-            <div className="signup">
-              Have an account ?<Link to="/"> Signup Now</Link>
+              <button
+                type="submit"
+                className="login-button"
+                disabled={isSubmitting}
+              >
+                Reset Password
+              </button>
+            </form>
+            <div className="pass-signup mt-2">
+              <div className="signup">
+                Have an account ?<Link to="/"> Signup Now</Link>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 

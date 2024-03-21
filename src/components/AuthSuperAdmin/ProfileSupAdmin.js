@@ -169,6 +169,7 @@ import {
 import Cookies from 'js-cookie';
 import { FaDiamond } from 'react-icons/fa6';
 import { toast } from 'react-toastify';
+import CustomSpinner from '../Common/CustomSpinner';
 
 function ProfileSupAdmin() {
   const [profileData, setProfileData] = useState({
@@ -178,15 +179,19 @@ function ProfileSupAdmin() {
   });
   const [selectedFile, setSelectedFile] = useState(null);
   const [uploadedAvatar, setUploadedAvatar] = useState('');
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const token = Cookies.get('token');
     const fetchData = async () => {
+      setLoading(true);
       try {
         const data = await fetchProfileData(token);
         setProfileData(data);
       } catch (error) {
         console.error('Error fetching profile data:', error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -206,8 +211,8 @@ function ProfileSupAdmin() {
     }
 
     try {
+      setLoading(true);
       const token = Cookies.get('token');
-
       let avatarUrl = profileData.avatar;
 
       if (selectedFile) {
@@ -215,7 +220,6 @@ function ProfileSupAdmin() {
         formData.append('image', selectedFile);
         const uploadResponse = await uploadProfileImage(formData);
         avatarUrl = uploadResponse.data.data;
-        console.log('object', uploadResponse);
       }
 
       const response = await updateProfileData(token, {
@@ -224,9 +228,16 @@ function ProfileSupAdmin() {
         avatar: avatarUrl,
       });
 
+      setProfileData({
+        ...profileData,
+        avatar: avatarUrl,
+      });
+
       toast.success(response.message || 'Profile updated successfully.');
     } catch (error) {
       toast.error('Error updating profile.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -241,77 +252,83 @@ function ProfileSupAdmin() {
   };
 
   return (
-    <div className="containerCard">
-      <div className="text-center mb-5">
-        <h1 className="text-dark">
-          <b className="text-primary">SuperAdmin</b> Profile
-        </h1>
-        <p className="sec-icon fs-3">
-          <FaDiamond className="text-dark" />
-        </p>
-      </div>
-      <div className="row align-item-center d-flex justify-content-center mb-3">
-        <div className="container-1 col-md-6 col-lg-6 col-12">
-          <div className=" text-center">
-            <div className="profile-pic">
-              <label className="-label" htmlFor="file">
-                <span className="glyphicon glyphicon-camera"></span>
-                <span>Change Image</span>
-              </label>
-              <input
-                id="file"
-                type="file"
-                onChange={handleFileChange}
-                className="imgChange"
-              />
-              <img
-                className="changeProfile"
-                id="output"
-                src={profileData.avatar}
-                width="200"
-                alt="Profile Avatar"
-              />
+    <>
+      {loading ? (
+        <CustomSpinner />
+      ) : (
+        <div className="containerCard">
+          <div className="text-center mb-5">
+            <h1 className="text-dark">
+              <b className="text-primary">SuperAdmin</b> Profile
+            </h1>
+            <p className="sec-icon fs-3">
+              <FaDiamond className="text-dark" />
+            </p>
+          </div>
+          <div className="row align-item-center d-flex justify-content-center mb-3">
+            <div className="container-1 col-md-6 col-lg-6 col-12">
+              <div className=" text-center">
+                <div className="profile-pic">
+                  <label className="-label" htmlFor="file">
+                    <span className="glyphicon glyphicon-camera"></span>
+                    <span>Change Image</span>
+                  </label>
+                  <input
+                    id="file"
+                    type="file"
+                    onChange={handleFileChange}
+                    className="imgChange"
+                  />
+                  <img
+                    className="changeProfile"
+                    id="output"
+                    src={profileData.avatar}
+                    width="200"
+                    alt="Profile Avatar"
+                  />
+                </div>
+                <h5 className="my-3 text-white">{profileData.name}</h5>
+                <p className="mb-1 text-white">{profileData.email}</p>
+              </div>
             </div>
-            <h5 className="my-3 text-white">{profileData.name}</h5>
-            <p className="mb-1 text-white">{profileData.email}</p>
+            <div className="container-2 col-12 col-md-6 col-lg-6">
+              <form className="w-100">
+                <div className="form-group groupInputProfile mb-3 p-2">
+                  <label htmlFor="labelProfile">Name</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="exampleInputPassword1"
+                    name="name"
+                    value={profileData.name}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div className="form-group groupInputProfile mb-3 p-2">
+                  <label htmlFor="exampleInputEmail1 mb-2">Email address</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="exampleInputEmail1"
+                    aria-describedby="emailHelp"
+                    name="email"
+                    value={profileData.email}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={handleUpdateProfile}
+                >
+                  Update Profile
+                </button>
+              </form>
+            </div>
           </div>
         </div>
-        <div className="container-2 col-12 col-md-6 col-lg-6">
-          <form className="w-100">
-            <div className="form-group groupInputProfile mb-3 p-2">
-              <label htmlFor="labelProfile">Name</label>
-              <input
-                type="text"
-                className="form-control"
-                id="exampleInputPassword1"
-                name="name"
-                value={profileData.name}
-                onChange={handleInputChange}
-              />
-            </div>
-            <div className="form-group groupInputProfile mb-3 p-2">
-              <label htmlFor="exampleInputEmail1 mb-2">Email address</label>
-              <input
-                type="text"
-                className="form-control"
-                id="exampleInputEmail1"
-                aria-describedby="emailHelp"
-                name="email"
-                value={profileData.email}
-                onChange={handleInputChange}
-              />
-            </div>
-            <button
-              type="button"
-              className="btn btn-primary"
-              onClick={handleUpdateProfile}
-            >
-              Update Profile
-            </button>
-          </form>
-        </div>
-      </div>
-    </div>
+      )}
+    </>
   );
 }
 

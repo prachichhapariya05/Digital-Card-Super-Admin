@@ -269,6 +269,7 @@ import './CardList.css';
 import { IoIosSearch } from 'react-icons/io';
 import { FaDiamond } from 'react-icons/fa6';
 import LogoImage from '../../assets/icons/logoLight.png';
+import CustomSpinner from '../Common/CustomSpinner';
 
 const { Header, Content, Sider } = Layout;
 const { SubMenu } = Menu;
@@ -309,6 +310,7 @@ const CardList = () => {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
   const [selectedItemKey, setSelectedItemKey] = useState(items[0].key);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const [cardLists, setCardLists] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -338,6 +340,8 @@ const CardList = () => {
         }
       } catch (error) {
         toast.error('Error fetching card lists:', error);
+      } finally {
+        setLoading(false); // Set loading to false after API call is completed
       }
     };
 
@@ -434,7 +438,9 @@ const CardList = () => {
                         </p>
                       </div>
                     </div>
-                    {filteredCardLists.length === 0 ? (
+                    {loading ? (
+                      <CustomSpinner /> // Render a spinner while loading
+                    ) : filteredCardLists.length === 0 ? (
                       <p className="text-center fs-3 d-flex justify-content-center mt-5 align-item-center">
                         No card lists found
                       </p>

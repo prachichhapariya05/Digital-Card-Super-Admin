@@ -21,6 +21,7 @@ import ProfileSupAdmin from '../AuthSuperAdmin/ProfileSupAdmin';
 import ChangePasswordSupAdmin from '../AuthSuperAdmin/ChangePasswordSupAdmin';
 import AddCompany from './AddCompany';
 import LogoImage from '../../assets/icons/logoLight.png';
+import CustomSpinner from '../Common/CustomSpinner';
 
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
@@ -63,6 +64,7 @@ function CompanyDetailsSupAdmin() {
   const { companyID } = useParams();
   const navigate = useNavigate();
   const [modalVisible, setModalVisible] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const {
     token: { colorBgContainer, borderRadiusLG },
@@ -86,6 +88,7 @@ function CompanyDetailsSupAdmin() {
 
   const fetchCompanyDetails = async () => {
     try {
+      setLoading(true);
       const token = Cookies.get('token');
       const headers = {
         Authorization: token,
@@ -104,7 +107,9 @@ function CompanyDetailsSupAdmin() {
       const responseData = await response.json();
       const companyData = responseData.data[0];
       setCompanyDetails(companyData);
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
       toast.error('Error fetching company details:', error);
     }
   };
@@ -122,6 +127,7 @@ function CompanyDetailsSupAdmin() {
 
   const handleFileChange = async (event) => {
     try {
+      setLoading(true);
       const file = event.target.files[0];
       const formData = new FormData();
       formData.append('image', file);
@@ -147,7 +153,9 @@ function CompanyDetailsSupAdmin() {
           company_logo: responseData.data,
         });
       }
+      setLoading(true);
     } catch (error) {
+      setLoading(false);
       toast.error(error.message);
     }
   };
@@ -231,6 +239,7 @@ function CompanyDetailsSupAdmin() {
     }
 
     try {
+      setLoading(true);
       const token = Cookies.get('token');
       const updatedData = {
         company_id: companyDetails.id,
@@ -254,7 +263,9 @@ function CompanyDetailsSupAdmin() {
         fetchCompanyDetails();
         setModalVisible(false);
       }
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
       toast.error(error.response.data.error);
     }
   };
@@ -318,15 +329,19 @@ function CompanyDetailsSupAdmin() {
             margin: '24px 16px 0',
           }}
         >
-          <div
-            style={{
-              padding: 24,
-              minHeight: 360,
-              background: colorBgContainer,
-              borderRadius: borderRadiusLG,
-            }}
-          >
-            {/* <div className="containerbody">
+          {loading ? (
+            <CustomSpinner /> // Display spinner while loading
+          ) : (
+            <>
+              <div
+                style={{
+                  padding: 24,
+                  minHeight: 360,
+                  background: colorBgContainer,
+                  borderRadius: borderRadiusLG,
+                }}
+              >
+                {/* <div className="containerbody">
               <div className="card cardConatiner">
                 <div
                   className="row card-header mb-2"
@@ -634,277 +649,307 @@ function CompanyDetailsSupAdmin() {
                 </div>
               </div>
             </div> */}
-            <div className="m-3">
-              <div
-                className="row card-header mb-2"
-                style={{
-                  backgroundColor: '#0f8ede14',
-                }}
-              >
-                <div className="logo_image col-md-3 col-lg-3 col-sm-2">
-                  <label className="-labelLogo" for="file">
-                    <span className="glyphicon glyphicon-camera-logo"></span>
-                    <span className="text-center text_change_logo">
-                      Change Logo
-                    </span>
-                  </label>
-                  <input
-                    id="file"
-                    type="file"
-                    onChange={handleFileChange}
-                    className="logoChange"
-                  />
-                  <img
-                    className="changeLogo"
-                    id="output"
-                    src={companyDetails?.company_logo}
-                    width="50px"
-                    alt="Profile Avatar"
-                  />
-                </div>
-                <div className="col-md-9 col-lg-9 col-sm-10 d-flex align-items-center">
-                  <h3
+                <div className="m-3">
+                  <div
+                    className="row card-header mb-2"
                     style={{
-                      color: '#2558a1',
-                      textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
+                      backgroundColor: '#0f8ede14',
                     }}
                   >
-                    {companyDetails?.company_name}
-                  </h3>
-                </div>
-              </div>
-
-              <div className="row">
-                <div className="col">
-                  <div className="input-group-details">
-                    <label className="labelTag-details">Company Name</label>
-                    <input
-                      type="text"
-                      className="inputTag-details"
-                      placeholder="Enter company name"
-                      value={companyDetails?.company_name || ''}
-                      onChange={(e) =>
-                        setCompanyDetails({
-                          ...companyDetails,
-                          company_name: e.target.value,
-                        })
-                      }
-                    />
-                  </div>
-                </div>
-                {companyDetails && (
-                  <div className="col">
-                    <div className="input-group-details">
-                      <label className="labelTag-details">Company Email</label>
+                    <div className="logo_image col-md-3 col-lg-3 col-sm-2">
+                      <label className="-labelLogo" for="file">
+                        <span className="glyphicon glyphicon-camera-logo"></span>
+                        <span className="text-center text_change_logo">
+                          Change Logo
+                        </span>
+                      </label>
                       <input
-                        type="text"
-                        className="inputTag-details"
-                        placeholder="Enter company email"
-                        value={companyDetails.company_email || ''}
-                        onChange={(e) =>
-                          setCompanyDetails({
-                            ...companyDetails,
-                            company_email: e.target.value,
-                          })
-                        }
+                        id="file"
+                        type="file"
+                        onChange={handleFileChange}
+                        className="logoChange"
+                      />
+                      <img
+                        className="changeLogo"
+                        id="output"
+                        src={companyDetails?.company_logo}
+                        width="50px"
+                        alt="Profile Avatar"
                       />
                     </div>
+                    <div className="col-md-9 col-lg-9 col-sm-10 d-flex align-items-center">
+                      <h3
+                        style={{
+                          color: '#2558a1',
+                          textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
+                        }}
+                      >
+                        {companyDetails?.company_name}
+                      </h3>
+                    </div>
                   </div>
-                )}
-              </div>
 
-              <div className="row">
-                <div className="col">
-                  <div className="input-group-details">
-                    <label className="labelTag-details">Description</label>
-                    <textarea
-                      type="text"
-                      className="inputTag-details"
-                      placeholder="Enter description"
-                      value={companyDetails?.description || ''}
-                      onChange={(e) =>
-                        setCompanyDetails({
-                          ...companyDetails,
-                          description: e.target.value,
-                        })
-                      }
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div className="row">
-                <div className="col">
-                  <div className="input-group-details">
-                    <label className="labelTag-details">Company Address</label>
-                    <input
-                      type="text"
-                      className="inputTag-details"
-                      placeholder="Enter company address"
-                      value={companyDetails?.company_address || ''}
-                      onChange={(e) =>
-                        setCompanyDetails({
-                          ...companyDetails,
-                          company_address: e.target.value,
-                        })
-                      }
-                    />
-                  </div>
-                </div>
-                <div className="col">
-                  <div className="input-group-details">
-                    <label className="labelTag-details">Company Phone</label>
-                    <input
-                      type="text"
-                      className="inputTag-details"
-                      placeholder="Enter company phone"
-                      value={companyDetails?.company_contact_number || ''}
-                      onChange={(e) =>
-                        setCompanyDetails({
-                          ...companyDetails,
-                          company_contact_number: e.target.value,
-                        })
-                      }
-                    />
-                  </div>
-                </div>
-              </div>
-              <div className="row">
-                <div className="col">
-                  <div className="input-group-details">
-                    <label className="labelTag-details">Maximun Cards</label>
-                    <input
-                      type="text"
-                      className="inputTag-details"
-                      placeholder="Enter maximun cards"
-                      value={companyDetails?.max_cards || ''}
-                      onChange={(e) =>
-                        setCompanyDetails({
-                          ...companyDetails,
-                          max_cards: e.target.value,
-                        })
-                      }
-                    />
-                  </div>
-                </div>
-                <div className="col">
-                  <div className="input-group-details">
-                    <label className="labelTag-details">Used Cards</label>
-                    <input
-                      readOnly
-                      type="text"
-                      className="inputTag-details"
-                      placeholder="0"
-                      value={companyDetails?.used_cards}
-                      onChange={(e) =>
-                        setCompanyDetails({
-                          ...companyDetails,
-                          used_cards: e.target.value,
-                        })
-                      }
-                    />
-                  </div>
-                </div>
-              </div>
-              <div className="row">
-                <div className="col">
-                  <div className="input-group-details">
-                    <label className="labelTag-details">
-                      Contact Person Name
-                    </label>
-                    <input
-                      type="text"
-                      className="inputTag-details"
-                      placeholder="Enter contact person name"
-                      value={companyDetails?.contact_person_name}
-                      onChange={(e) =>
-                        setCompanyDetails({
-                          ...companyDetails,
-                          contact_person_name: e.target.value,
-                        })
-                      }
-                    />
-                  </div>
-                </div>
-                <div className="col">
-                  <div className="input-group-details">
-                    <label className="labelTag-details">
-                      Contact Person Designation
-                    </label>
-                    <input
-                      type="text"
-                      className="inputTag-details"
-                      placeholder="Enter contact person designation"
-                      value={companyDetails?.contact_person_designation || ''}
-                      onChange={(e) =>
-                        setCompanyDetails({
-                          ...companyDetails,
-                          contact_person_designation: e.target.value,
-                        })
-                      }
-                    />
-                  </div>
-                </div>
-              </div>
-              <div className="row">
-                <div className="col">
-                  <div className="input-group-details">
-                    <label className="labelTag-details">
-                      Contact Person Email
-                    </label>
-                    <input
-                      type="text"
-                      className="inputTag-details"
-                      placeholder="Enter contact person email"
-                      value={companyDetails?.contact_person_email || ''}
-                      onChange={(e) =>
-                        setCompanyDetails({
-                          ...companyDetails,
-                          contact_person_email: e.target.value,
-                        })
-                      }
-                    />
-                  </div>
-                </div>
-                <div className="col">
-                  <div className="input-group-details">
-                    <label className="labelTag-details">
-                      Contact Person Mobile
-                    </label>
-                    <input
-                      type="text"
-                      className="inputTag-details"
-                      placeholder="Enter contact person mobile
-                  "
-                      value={companyDetails?.contact_person_mobile || ''}
-                      onChange={(e) =>
-                        setCompanyDetails({
-                          ...companyDetails,
-                          contact_person_mobile: e.target.value,
-                        })
-                      }
-                    />
-                  </div>
-                </div>
-              </div>
-              <div className="row">
-                {companyDetails &&
-                companyDetails.status == 'activated' &&
-                (companyDetails?.company_admin_data[0].is_active === true ||
-                  companyDetails?.company_admin_data[0].is_active === null) ? (
-                  <>
-                    {companyDetails.company_admin_data[0]?.company_admin_id ==
-                    null ? (
-                      <div className="col-sm-12 col-md-6 col-lg-6">
-                        <button
-                          className="button-group"
-                          onClick={handleCreateAdmin}
-                        >
-                          Create Admin
-                        </button>
+                  <div className="row">
+                    <div className="col">
+                      <div className="input-group-details">
+                        <label className="labelTag-details">Company Name</label>
+                        <input
+                          type="text"
+                          className="inputTag-details"
+                          placeholder="Enter company name"
+                          value={companyDetails?.company_name || ''}
+                          onChange={(e) =>
+                            setCompanyDetails({
+                              ...companyDetails,
+                              company_name: e.target.value,
+                            })
+                          }
+                        />
                       </div>
+                    </div>
+                    {companyDetails && (
+                      <div className="col">
+                        <div className="input-group-details">
+                          <label className="labelTag-details">
+                            Company Email
+                          </label>
+                          <input
+                            type="text"
+                            className="inputTag-details"
+                            placeholder="Enter company email"
+                            value={companyDetails.company_email || ''}
+                            onChange={(e) =>
+                              setCompanyDetails({
+                                ...companyDetails,
+                                company_email: e.target.value,
+                              })
+                            }
+                          />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="row">
+                    <div className="col">
+                      <div className="input-group-details">
+                        <label className="labelTag-details">Description</label>
+                        <textarea
+                          type="text"
+                          className="inputTag-details"
+                          placeholder="Enter description"
+                          value={companyDetails?.description || ''}
+                          onChange={(e) =>
+                            setCompanyDetails({
+                              ...companyDetails,
+                              description: e.target.value,
+                            })
+                          }
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="row">
+                    <div className="col">
+                      <div className="input-group-details">
+                        <label className="labelTag-details">
+                          Company Address
+                        </label>
+                        <input
+                          type="text"
+                          className="inputTag-details"
+                          placeholder="Enter company address"
+                          value={companyDetails?.company_address || ''}
+                          onChange={(e) =>
+                            setCompanyDetails({
+                              ...companyDetails,
+                              company_address: e.target.value,
+                            })
+                          }
+                        />
+                      </div>
+                    </div>
+                    <div className="col">
+                      <div className="input-group-details">
+                        <label className="labelTag-details">
+                          Company Phone
+                        </label>
+                        <input
+                          type="text"
+                          className="inputTag-details"
+                          placeholder="Enter company phone"
+                          value={companyDetails?.company_contact_number || ''}
+                          onChange={(e) =>
+                            setCompanyDetails({
+                              ...companyDetails,
+                              company_contact_number: e.target.value,
+                            })
+                          }
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="col">
+                      <div className="input-group-details">
+                        <label className="labelTag-details">
+                          Maximun Cards
+                        </label>
+                        <input
+                          type="text"
+                          className="inputTag-details"
+                          placeholder="Enter maximun cards"
+                          value={companyDetails?.max_cards || ''}
+                          onChange={(e) =>
+                            setCompanyDetails({
+                              ...companyDetails,
+                              max_cards: e.target.value,
+                            })
+                          }
+                        />
+                      </div>
+                    </div>
+                    <div className="col">
+                      <div className="input-group-details">
+                        <label className="labelTag-details">Used Cards</label>
+                        <input
+                          readOnly
+                          type="text"
+                          className="inputTag-details"
+                          placeholder="0"
+                          value={companyDetails?.used_cards}
+                          onChange={(e) =>
+                            setCompanyDetails({
+                              ...companyDetails,
+                              used_cards: e.target.value,
+                            })
+                          }
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="col">
+                      <div className="input-group-details">
+                        <label className="labelTag-details">
+                          Contact Person Name
+                        </label>
+                        <input
+                          type="text"
+                          className="inputTag-details"
+                          placeholder="Enter contact person name"
+                          value={companyDetails?.contact_person_name}
+                          onChange={(e) =>
+                            setCompanyDetails({
+                              ...companyDetails,
+                              contact_person_name: e.target.value,
+                            })
+                          }
+                        />
+                      </div>
+                    </div>
+                    <div className="col">
+                      <div className="input-group-details">
+                        <label className="labelTag-details">
+                          Contact Person Designation
+                        </label>
+                        <input
+                          type="text"
+                          className="inputTag-details"
+                          placeholder="Enter contact person designation"
+                          value={
+                            companyDetails?.contact_person_designation || ''
+                          }
+                          onChange={(e) =>
+                            setCompanyDetails({
+                              ...companyDetails,
+                              contact_person_designation: e.target.value,
+                            })
+                          }
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="col">
+                      <div className="input-group-details">
+                        <label className="labelTag-details">
+                          Contact Person Email
+                        </label>
+                        <input
+                          type="text"
+                          className="inputTag-details"
+                          placeholder="Enter contact person email"
+                          value={companyDetails?.contact_person_email || ''}
+                          onChange={(e) =>
+                            setCompanyDetails({
+                              ...companyDetails,
+                              contact_person_email: e.target.value,
+                            })
+                          }
+                        />
+                      </div>
+                    </div>
+                    <div className="col">
+                      <div className="input-group-details">
+                        <label className="labelTag-details">
+                          Contact Person Mobile
+                        </label>
+                        <input
+                          type="text"
+                          className="inputTag-details"
+                          placeholder="Enter contact person mobile
+                  "
+                          value={companyDetails?.contact_person_mobile || ''}
+                          onChange={(e) =>
+                            setCompanyDetails({
+                              ...companyDetails,
+                              contact_person_mobile: e.target.value,
+                            })
+                          }
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="row">
+                    {companyDetails &&
+                    companyDetails.status == 'activated' &&
+                    (companyDetails?.company_admin_data[0].is_active === true ||
+                      companyDetails?.company_admin_data[0].is_active ===
+                        null) ? (
+                      <>
+                        {companyDetails.company_admin_data[0]
+                          ?.company_admin_id == null ? (
+                          <div className="col-sm-12 col-md-6 col-lg-6">
+                            <button
+                              className="button-group"
+                              onClick={handleCreateAdmin}
+                            >
+                              Create Admin
+                            </button>
+                          </div>
+                        ) : (
+                          <div className="col-sm-12 col-md-6 col-lg-6">
+                            <button
+                              className="button-group"
+                              onClick={() => toggleModal()}
+                            >
+                              Company Admin Data
+                            </button>
+                          </div>
+                        )}
+                        <div className="col-sm-12 col-md-6 col-lg-6">
+                          <button
+                            className="button-group"
+                            onClick={handleUpdateModal}
+                          >
+                            Update Details
+                          </button>
+                        </div>
+                      </>
                     ) : (
-                      <div className="col-sm-12 col-md-6 col-lg-6">
+                      <div className="col-sm-12 col-md-12 col-lg-12">
                         <button
                           className="button-group"
                           onClick={() => toggleModal()}
@@ -913,58 +958,44 @@ function CompanyDetailsSupAdmin() {
                         </button>
                       </div>
                     )}
-                    <div className="col-sm-12 col-md-6 col-lg-6">
-                      <button
-                        className="button-group"
-                        onClick={handleUpdateModal}
-                      >
-                        Update Details
-                      </button>
-                    </div>
-                  </>
-                ) : (
-                  <div className="col-sm-12 col-md-12 col-lg-12">
-                    <button
-                      className="button-group"
-                      onClick={() => toggleModal()}
-                    >
-                      Company Admin Data
-                    </button>
                   </div>
+                </div>
+
+                <AdminDetailsModal
+                  isOpen={showModal}
+                  onClose={toggleModal}
+                  adminDetails={companyDetails?.company_admin_data[0]}
+                  onAdminUpdate={handleAdminUpdate}
+                />
+
+                {modalVisible && (
+                  <Modal
+                    show={modalVisible}
+                    onHide={() => setModalVisible(false)}
+                  >
+                    <Modal.Header closeButton>
+                      <Modal.Title>Confirmation</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>{`Do you want to Update details of this company?`}</Modal.Body>
+                    <Modal.Footer>
+                      <button
+                        className="btn btn-secondary"
+                        onClick={() => handleEditCompany(true)}
+                      >
+                        Yes
+                      </button>
+                      <button
+                        className="btn btn-primary"
+                        onClick={() => setModalVisible(false)}
+                      >
+                        No
+                      </button>
+                    </Modal.Footer>
+                  </Modal>
                 )}
               </div>
-            </div>
-
-            <AdminDetailsModal
-              isOpen={showModal}
-              onClose={toggleModal}
-              adminDetails={companyDetails?.company_admin_data[0]}
-              onAdminUpdate={handleAdminUpdate}
-            />
-
-            {modalVisible && (
-              <Modal show={modalVisible} onHide={() => setModalVisible(false)}>
-                <Modal.Header closeButton>
-                  <Modal.Title>Confirmation</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>{`Do you want to Update details of this company?`}</Modal.Body>
-                <Modal.Footer>
-                  <button
-                    className="btn btn-secondary"
-                    onClick={() => handleEditCompany(true)}
-                  >
-                    Yes
-                  </button>
-                  <button
-                    className="btn btn-primary"
-                    onClick={() => setModalVisible(false)}
-                  >
-                    No
-                  </button>
-                </Modal.Footer>
-              </Modal>
-            )}
-          </div>
+            </>
+          )}
         </Content>
       </Layout>
     </Layout>

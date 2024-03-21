@@ -6,6 +6,7 @@ import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 import { Base_Url } from '../Api/Base_url';
 import { Modal } from 'antd';
+import Spinner from '../Common/CustomSpinner';
 
 const AddCompany = () => {
   const navigate = useNavigate();
@@ -17,6 +18,7 @@ const AddCompany = () => {
     contact_person_name: '',
     contact_person_email: '',
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     const token = Cookies.get('token');
@@ -31,6 +33,7 @@ const AddCompany = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
 
     if (
       !formData.company_name ||
@@ -41,26 +44,31 @@ const AddCompany = () => {
       !formData.contact_person_email
     ) {
       toast.error('All fields are required');
+      setIsSubmitting(false);
       return;
     }
 
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.company_email)) {
       toast.error('Invalid Comapny email address');
+      setIsSubmitting(false);
       return;
     }
 
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.contact_person_email)) {
       toast.error('Invalid Contact Person email address');
+      setIsSubmitting(false);
       return;
     }
 
     if (!/^\d{10}$/.test(formData.company_contact_number)) {
       toast.error('Company contact number must be exactly 10 numbers');
+      setIsSubmitting(false);
       return;
     }
 
     if (!/^\d+$/.test(formData.max_cards)) {
       toast.error('Maximum cards must contain only numbers');
+      setIsSubmitting(false);
       return;
     }
 
@@ -76,15 +84,18 @@ const AddCompany = () => {
           contact_person_name: '',
           contact_person_email: '',
         });
-        navigate('/dashboard');
+        // navigate('/dashboard');
       }
     } catch (error) {
       toast.error(error.response.data.message);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
     <div>
+      {isSubmitting && <Spinner />}
       <div className="p-2">
         <div className="contact-form-wrapper d-flex justify-content-center">
           <form
