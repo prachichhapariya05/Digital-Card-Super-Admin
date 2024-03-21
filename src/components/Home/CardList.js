@@ -382,7 +382,11 @@ const CardList = () => {
             <img
               src={LogoImage}
               alt="Logo"
-              style={{ width: '100%', padding: '16px 0' }}
+              style={{
+                width: '100%',
+                padding: '16px 0',
+                backgroundColor: '#272C3B',
+              }}
             />
           </div>
           <Menu
@@ -390,13 +394,18 @@ const CardList = () => {
             mode="inline"
             defaultSelectedKeys={['1']}
             selectedKeys={[selectedItemKey]}
-            style={{ height: '100vh' }}
+            style={{ height: '100vh', backgroundColor: '#272C3B' }}
           >
             {items.map((item) => (
               <Menu.Item
                 key={item.key}
                 icon={item.icon}
                 onClick={() => handleMenuItemClick(item.key, item.path)}
+                style={{
+                  color: 'white',
+                  backgroundColor:
+                    selectedItemKey === item.key ? '#12A0A2' : undefined,
+                }}
               >
                 {item.label}
               </Menu.Item>
