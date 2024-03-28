@@ -106,10 +106,10 @@ function SignIn() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                   />
-                  {emailError && (
-                    <div className="error-message">{emailError}</div>
-                  )}
                 </div>
+                {emailError && (
+                  <div className="error-message">{emailError}</div>
+                )}
                 <div className="input-group inputFieldGroup mb-3">
                   <input
                     type={showPassword ? 'text' : 'password'}
@@ -121,10 +121,10 @@ function SignIn() {
                     aria-label="Password"
                     aria-describedby="basic-addon2"
                   />
-                  {passwordError && (
-                    <div className="error-message">{passwordError}</div>
-                  )}
                 </div>
+                {passwordError && (
+                  <div className="error-message">{passwordError}</div>
+                )}
                 <p className="text-center">
                   <Link
                     to="/forget-password"
