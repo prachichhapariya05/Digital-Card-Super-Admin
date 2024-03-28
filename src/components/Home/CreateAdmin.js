@@ -103,7 +103,7 @@ const CreateAdmin = () => {
       const response = await createCompanyAdmin(formData);
 
       if (response.success === true) {
-        navigate(`/company-details-super-admin/${companyID}`);
+        navigate('/dashboard');
         toast.success(response.message);
       } else {
         toast.error(response.message);
