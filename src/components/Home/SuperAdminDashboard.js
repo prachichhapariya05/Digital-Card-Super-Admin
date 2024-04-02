@@ -183,7 +183,7 @@ function SuperAdminDashboard() {
               <table className="table table-striped responsive">
                 <thead>
                   <tr className="text-center">
-                    <th scope="col">#</th>
+                    {/* <th scope="col">#</th> */}
                     <th scope="col">Name</th>
                     <th scope="col">Email</th>
                     <th scope="col">Contact</th>
@@ -199,7 +199,7 @@ function SuperAdminDashboard() {
                 <tbody>
                   {currentCompanies.map((company, index) => (
                     <tr key={index} className="text-center align-item-center">
-                      <th scope="row">{index + 1}</th>
+                      {/* <th scope="row">{index + 1}</th> */}
                       <td>{company.company_name}</td>
                       <td>{company.company_email}</td>
                       <td>{company.company_contact_number}</td>

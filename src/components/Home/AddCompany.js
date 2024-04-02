@@ -5,7 +5,6 @@ import './AddComapny.css';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 import { Base_Url } from '../Api/Base_url';
-import { Modal } from 'antd';
 import Spinner from '../Common/CustomSpinner';
 
 const AddCompany = () => {
@@ -20,7 +19,15 @@ const AddCompany = () => {
     trial_duration: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-
+  const [errors, setErrors] = useState({
+    company_name: '',
+    company_email: '',
+    company_contact_number: '',
+    max_cards: '',
+    contact_person_name: '',
+    contact_person_email: '',
+    trial_duration: '',
+  });
   useEffect(() => {
     const token = Cookies.get('token');
     if (token) {
@@ -29,7 +36,19 @@ const AddCompany = () => {
   }, []);
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    let newErrors = { ...errors };
+
+    if (name === 'company_contact_number' || name === 'max_cards') {
+      if (!/^\d*$/.test(value)) {
+        newErrors[name] = 'Must contain only numbers';
+      } else {
+        newErrors[name] = '';
+      }
+    }
+
+    setErrors(newErrors);
+    setFormData({ ...formData, [name]: value });
   };
 
   const handleDurationChange = (value) => {
@@ -66,11 +85,11 @@ const AddCompany = () => {
       return;
     }
 
-    if (!/^\d{10}$/.test(formData.company_contact_number)) {
-      toast.error('Company contact number must be exactly 10 numbers');
-      setIsSubmitting(false);
-      return;
-    }
+    // if (!/^\d{10}$/.test(formData.company_contact_number)) {
+    //   toast.error('Company contact number must be exactly 10 numbers');
+    //   setIsSubmitting(false);
+    //   return;
+    // }
 
     if (!/^\d+$/.test(formData.max_cards)) {
       toast.error('Maximum cards must contain only numbers');
@@ -145,6 +164,9 @@ const AddCompany = () => {
                 value={formData.company_contact_number}
                 onChange={handleChange}
               />
+              {errors.company_contact_number && (
+                <p className="error-message">{errors.company_contact_number}</p>
+              )}
             </div>
             <div>
               <input
@@ -156,6 +178,9 @@ const AddCompany = () => {
                 value={formData.max_cards}
                 onChange={handleChange}
               />
+              {errors.max_cards && (
+                <p className="error-message">{errors.max_cards}</p>
+              )}
             </div>
             <div>
               <input

@@ -4,7 +4,6 @@ import { editCompanyDetails } from '../Api/Company_api';
 import Cookies from 'js-cookie';
 import './CompanyDetailsSupAdmin.css';
 import AdminDetailsModal from './AdminDetailsModal';
-import SideNavbar from './SideNavbar';
 import { toast } from 'react-toastify';
 import { Base_Url } from '../Api/Base_url';
 import { Modal } from 'react-bootstrap';
@@ -58,14 +57,40 @@ const items = [
 ];
 
 function CompanyDetailsSupAdmin() {
-  const [companyDetails, setCompanyDetails] = useState(null);
+  // const [companyDetails, setCompanyDetails] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [selectedAdminDetails, setSelectedAdminDetails] = useState(null);
   const { companyID } = useParams();
   const navigate = useNavigate();
   const [modalVisible, setModalVisible] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [companyError, setCompanyError] = useState('');
+  const [contactError, setContactError] = useState('');
+  const [companyDetails, setCompanyDetails] = useState({
+    company_contact_number: '',
+    contact_person_mobile: '',
+  });
 
+  const handleChange = (e, field) => {
+    const inputValue = e.target.value;
+    if (/^\d+$/.test(inputValue) || inputValue === '') {
+      setCompanyDetails({
+        ...companyDetails,
+        [field]: inputValue,
+      });
+      if (field === 'company_contact_number') {
+        setCompanyError('');
+      } else if (field === 'contact_person_mobile') {
+        setContactError('');
+      }
+    } else {
+      if (field === 'company_contact_number') {
+        setCompanyError('Please enter numbers only');
+      } else if (field === 'contact_person_mobile') {
+        setContactError('Please enter numbers only');
+      }
+    }
+  };
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
@@ -206,17 +231,6 @@ function CompanyDetailsSupAdmin() {
       toast.error('Please enter a valid company email address....');
       return;
     }
-
-    const phonePattern = /^\d{10}$/;
-    if (!phonePattern.test(companyDetails.company_contact_number)) {
-      toast.error('Please enter a valid 10-digit phone number');
-      return;
-    }
-    if (!phonePattern.test(companyDetails.contact_person_mobile)) {
-      toast.error('Please enter a valid 10-digit phone number');
-      return;
-    }
-
     const requiredFields = [
       'company_name',
       'company_email',
@@ -339,7 +353,7 @@ function CompanyDetailsSupAdmin() {
           }}
         >
           {loading ? (
-            <CustomSpinner /> // Display spinner while loading
+            <CustomSpinner />
           ) : (
             <>
               <div
@@ -350,314 +364,6 @@ function CompanyDetailsSupAdmin() {
                   borderRadius: borderRadiusLG,
                 }}
               >
-                {/* <div className="containerbody">
-              <div className="card cardConatiner">
-                <div
-                  className="row card-header mb-2"
-                  style={{
-                    backgroundColor: '#0f8ede14',
-                  }}
-                >
-                  <div className="logo_image col-3">
-                    <label className="-labelLogo" for="file">
-                      <span className="glyphicon glyphicon-camera-logo"></span>
-                      <span className="text-center text_change_logo">
-                        Change Logo
-                      </span>
-                    </label>
-                    <input
-                      id="file"
-                      type="file"
-                      onChange={handleFileChange}
-                      className="logoChange"
-                    />
-                    <img
-                      className="changeLogo"
-                      id="output"
-                      src={companyDetails?.company_logo}
-                      width="50px"
-                      alt="Profile Avatar"
-                    />
-                  </div>
-
-                  <div className="col-9 d-flex align-items-center">
-                    <h3
-                      style={{
-                        color: '#2558a1',
-                        textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
-                        fontFamily: 'Lucida Sans',
-                      }}
-                    >
-                      {companyDetails?.company_name}
-                    </h3>
-                  </div>
-                </div>
-
-                <div className="row">
-                  <div className="col">
-                    <div className="input-group-details">
-                      <label className="labelTag-details">Company Name</label>
-                      <input
-                        type="text"
-                        className="inputTag-details"
-                        placeholder="Enter company name"
-                        value={companyDetails?.company_name || ''}
-                        onChange={(e) =>
-                          setCompanyDetails({
-                            ...companyDetails,
-                            company_name: e.target.value,
-                          })
-                        }
-                      />
-                    </div>
-                  </div>
-                  {companyDetails && (
-                    <div className="col">
-                      <div className="input-group-details">
-                        <label className="labelTag-details">
-                          Company Email
-                        </label>
-                        <input
-                          type="text"
-                          className="inputTag-details"
-                          placeholder="Enter company email"
-                          value={companyDetails.company_email || ''}
-                          onChange={(e) =>
-                            setCompanyDetails({
-                              ...companyDetails,
-                              company_email: e.target.value,
-                            })
-                          }
-                        />
-                      </div>
-                    </div>
-                  )}
-                </div>
-                <div className="row">
-                  <div className="col">
-                    <div className="input-group-details">
-                      <label className="labelTag-details">Description</label>
-                      <textarea
-                        type="text"
-                        className="inputTag-details"
-                        placeholder="Enter description"
-                        value={companyDetails?.description || ''}
-                        onChange={(e) =>
-                          setCompanyDetails({
-                            ...companyDetails,
-                            description: e.target.value,
-                          })
-                        }
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="col">
-                    <div className="input-group-details">
-                      <label className="labelTag-details">
-                        Company Address
-                      </label>
-                      <input
-                        type="text"
-                        className="inputTag-details"
-                        placeholder="Enter company address"
-                        value={companyDetails?.company_address || ''}
-                        onChange={(e) =>
-                          setCompanyDetails({
-                            ...companyDetails,
-                            company_address: e.target.value,
-                          })
-                        }
-                      />
-                    </div>
-                  </div>
-                  <div className="col">
-                    <div className="input-group-details">
-                      <label className="labelTag-details">Company Phone</label>
-                      <input
-                        type="text"
-                        className="inputTag-details"
-                        placeholder="Enter company phone"
-                        value={companyDetails?.company_contact_number || ''}
-                        onChange={(e) =>
-                          setCompanyDetails({
-                            ...companyDetails,
-                            company_contact_number: e.target.value,
-                          })
-                        }
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="row">
-                  <div className="col">
-                    <div className="input-group-details">
-                      <label className="labelTag-details">Maximun Cards</label>
-                      <input
-                        type="text"
-                        className="inputTag-details"
-                        placeholder="Enter maximun cards"
-                        value={companyDetails?.max_cards || ''}
-                        onChange={(e) =>
-                          setCompanyDetails({
-                            ...companyDetails,
-                            max_cards: e.target.value,
-                          })
-                        }
-                      />
-                    </div>
-                  </div>
-                  <div className="col">
-                    <div className="input-group-details">
-                      <label className="labelTag-details">Used Cards</label>
-                      <input
-                        readOnly
-                        type="text"
-                        className="inputTag-details"
-                        placeholder="0"
-                        value={companyDetails?.used_cards}
-                        onChange={(e) =>
-                          setCompanyDetails({
-                            ...companyDetails,
-                            used_cards: e.target.value,
-                          })
-                        }
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="col">
-                    <div className="input-group-details">
-                      <label className="labelTag-details">
-                        Contact Person Name
-                      </label>
-                      <input
-                        type="text"
-                        className="inputTag-details"
-                        placeholder="Enter contact person name"
-                        value={companyDetails?.contact_person_name}
-                        onChange={(e) =>
-                          setCompanyDetails({
-                            ...companyDetails,
-                            contact_person_name: e.target.value,
-                          })
-                        }
-                      />
-                    </div>
-                  </div>
-                  <div className="col">
-                    <div className="input-group-details">
-                      <label className="labelTag-details">
-                        Contact Person Designation
-                      </label>
-                      <input
-                        type="text"
-                        className="inputTag-details"
-                        placeholder="Enter contact person designation"
-                        value={companyDetails?.contact_person_designation || ''}
-                        onChange={(e) =>
-                          setCompanyDetails({
-                            ...companyDetails,
-                            contact_person_designation: e.target.value,
-                          })
-                        }
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="col">
-                    <div className="input-group-details">
-                      <label className="labelTag-details">
-                        Contact Person Email
-                      </label>
-                      <input
-                        type="text"
-                        className="inputTag-details"
-                        placeholder="Enter contact person email"
-                        value={companyDetails?.contact_person_email || ''}
-                        onChange={(e) =>
-                          setCompanyDetails({
-                            ...companyDetails,
-                            contact_person_email: e.target.value,
-                          })
-                        }
-                      />
-                    </div>
-                  </div>
-                  <div className="col">
-                    <div className="input-group-details">
-                      <label className="labelTag-details">
-                        Contact Person Mobile
-                      </label>
-                      <input
-                        type="text"
-                        className="inputTag-details"
-                        placeholder="Enter contact person mobile
-                  "
-                        value={companyDetails?.contact_person_mobile || ''}
-                        onChange={(e) =>
-                          setCompanyDetails({
-                            ...companyDetails,
-                            contact_person_mobile: e.target.value,
-                          })
-                        }
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div className="row">
-                  {companyDetails &&
-                  companyDetails.status == 'activated' &&
-                  (companyDetails?.company_admin_data[0].is_active === true ||
-                    companyDetails?.company_admin_data[0].is_active ===
-                      null) ? (
-                    <>
-                      {companyDetails.company_admin_data[0]?.company_admin_id ==
-                      null ? (
-                        <div className="col-sm-12 col-md-6 col-lg-6">
-                          <button
-                            className="button-group"
-                            onClick={handleCreateAdmin}
-                          >
-                            Create Admin
-                          </button>
-                        </div>
-                      ) : (
-                        <div className="col-sm-12 col-md-6 col-lg-6">
-                          <button
-                            className="button-group"
-                            onClick={() => toggleModal()}
-                          >
-                            Company Admin Data
-                          </button>
-                        </div>
-                      )}
-                      <div className="col-sm-12 col-md-6 col-lg-6">
-                        <button
-                          className="button-group"
-                          onClick={handleUpdateModal}
-                        >
-                          Update Details
-                        </button>
-                      </div>
-                    </>
-                  ) : (
-                    <div className="col-sm-12 col-md-12 col-lg-12">
-                      <button
-                        className="button-group"
-                        onClick={() => toggleModal()}
-                      >
-                        Company Admin Data
-                      </button>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div> */}
                 <div className="m-3">
                   <div
                     className="row card-header mb-2"
@@ -790,12 +496,12 @@ function CompanyDetailsSupAdmin() {
                           placeholder="Enter company phone"
                           value={companyDetails?.company_contact_number || ''}
                           onChange={(e) =>
-                            setCompanyDetails({
-                              ...companyDetails,
-                              company_contact_number: e.target.value,
-                            })
+                            handleChange(e, 'company_contact_number')
                           }
                         />
+                        {companyError && (
+                          <p style={{ color: 'red' }}>{companyError}</p>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -908,16 +614,15 @@ function CompanyDetailsSupAdmin() {
                         <input
                           type="text"
                           className="inputTag-details"
-                          placeholder="Enter contact person mobile
-                  "
+                          placeholder="Enter contact person mobile"
                           value={companyDetails?.contact_person_mobile || ''}
                           onChange={(e) =>
-                            setCompanyDetails({
-                              ...companyDetails,
-                              contact_person_mobile: e.target.value,
-                            })
+                            handleChange(e, 'contact_person_mobile')
                           }
                         />
+                        {contactError && (
+                          <p style={{ color: 'red' }}>{contactError}</p>
+                        )}
                       </div>
                     </div>
                   </div>
