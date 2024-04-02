@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import SideNavbar from './SideNavbar';
+import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { createCompanyAdmin } from '../Api/Company_api';
 import { toast } from 'react-toastify';
@@ -16,6 +15,7 @@ import ProfileSupAdmin from '../AuthSuperAdmin/ProfileSupAdmin';
 import ChangePasswordSupAdmin from '../AuthSuperAdmin/ChangePasswordSupAdmin';
 import AddCompany from './AddCompany';
 import Cookies from 'js-cookie';
+import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
@@ -60,6 +60,13 @@ const CreateAdmin = () => {
   } = theme.useToken();
   const [selectedItemKey, setSelectedItemKey] = useState(items[0].key);
 
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handlePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
   const handleMenuItemClick = (key, path) => {
     setSelectedItemKey(key);
     navigate(path);
@@ -79,9 +86,6 @@ const CreateAdmin = () => {
     mobile_number: '',
     company_id: companyID,
   });
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -98,7 +102,7 @@ const CreateAdmin = () => {
     }
   };
 
-  const submitFormData = async (e) => {
+  const submitFormData = async () => {
     try {
       const response = await createCompanyAdmin(formData);
 
@@ -111,6 +115,18 @@ const CreateAdmin = () => {
     } catch (error) {
       toast.error('Failed to create company admin');
     }
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    let errorMessage = '';
+    if (name === 'mobile_number') {
+      if (!/^\d*$/.test(value)) {
+        errorMessage = 'Please enter only numbers';
+      }
+    }
+    setFormData({ ...formData, [name]: value });
+    setFormErrors({ ...formErrors, [name]: errorMessage });
   };
 
   return (
@@ -224,9 +240,9 @@ const CreateAdmin = () => {
                         <div className="text-danger">{formErrors.email}</div>
                       )}
                     </div>
-                    <div>
+                    <div className="position-relative">
                       <input
-                        type="password"
+                        type={showPassword ? 'text' : 'password'}
                         className="form-control rounded border-white mb-3 form-input"
                         id="password"
                         name="password"
@@ -234,10 +250,22 @@ const CreateAdmin = () => {
                         value={formData.password}
                         onChange={handleChange}
                       />
-                      {formErrors.password && (
-                        <div className="text-danger">{formErrors.password}</div>
-                      )}
+                      <button
+                        className="btn btn-none border-0 position-absolute end-0 top-50 translate-middle-y btnEye"
+                        type="button"
+                        onClick={handlePasswordVisibility}
+                      >
+                        {showPassword ? (
+                          <EyeInvisibleOutlined />
+                        ) : (
+                          <EyeOutlined />
+                        )}
+                      </button>
                     </div>
+                    {formErrors.password && (
+                      <div className="text-danger">{formErrors.password}</div>
+                    )}
+
                     <div>
                       <input
                         type="text"
